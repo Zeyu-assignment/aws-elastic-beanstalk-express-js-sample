@@ -3,9 +3,18 @@ pipeline {
         docker { image 'node:16' }
     }
     stages {
-        stage('Test') {
+        stage('Npm Install') {
             steps {
-                sh 'node --eval "console.log(process.platform,process.env.CI)"'
+		echo "Npm install"
+                sh 'npm install --save'
+            }
+        }
+    }
+    stages {
+        stage('Unit test') {
+            steps {
+                echo "Unit test"
+                sh 'npm test'
             }
         }
     }

@@ -23,7 +23,9 @@ pipeline {
                 echo "vulnerability scan"
 		snykSecurity(
           	  snykInstallation: 'snyk@latest',
-          	  snykTokenId: 'snyk-token'
+          	  snykTokenId: 'snyk-token',
+		  failOnIssues: true,
+		  failOnError: true
         	)
             }
         }

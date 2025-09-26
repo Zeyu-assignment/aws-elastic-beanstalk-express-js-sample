@@ -1,6 +1,9 @@
 pipeline {
     agent {
-        docker { image 'node:16' }
+        docker { 
+	    image 'node:16',
+	    args '-v /var/jenkins_home:/var/jenkins_home' 
+	}
     }
     stages {
         stage('Npm Install') {
@@ -19,7 +22,7 @@ pipeline {
             steps {
                 echo "vulnerability scan"
 		snykSecurity(
-          	  snykInstallation: 'synk@latest',
+          	  snykInstallation: 'snyk@latest',
           	  snykTokenId: 'snyk-token'
         	)
             }

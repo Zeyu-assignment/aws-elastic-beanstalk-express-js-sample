@@ -15,5 +15,14 @@ pipeline {
                 sh 'npm test'
             }   
         }
+        stage('Vulnerability scan') {
+            steps {
+                echo "vulnerability scan"
+		snykSecurity(
+          	  snykInstallation: 'synk@latest',
+          	  snykTokenId: 'snyk-token'
+        	)
+            }
+        }
     }
 }

@@ -9,13 +9,11 @@ pipeline {
                 sh 'npm install --save'
             }
         }
-    }
-    stages {
         stage('Unit test') {
             steps {
                 echo "Unit test"
                 sh 'npm test'
-            }
+            }   
         }
     }
 }

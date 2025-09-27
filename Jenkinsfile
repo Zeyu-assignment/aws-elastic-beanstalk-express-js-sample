@@ -32,8 +32,14 @@ pipeline {
         }
         stage('Build image') {
 	    agent any
+	    environment {
+                DOCKER_HOST = "tcp://docker:2376"
+                DOCKER_CERT_PATH = "/certs/client"
+                DOCKER_TLS_VERIFY = "1"
+            }
             steps {
                 echo "Build image"
+		sh '/bin/hostname'
                 script {
                   app = docker.build("21441677/assignment2_21441677")
                 }

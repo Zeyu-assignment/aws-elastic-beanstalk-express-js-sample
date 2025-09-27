@@ -31,6 +31,7 @@ pipeline {
             }
         }
         stage('Build image') {
+	    agent any
             steps {
                 echo "Build image"
                 script {
@@ -39,6 +40,7 @@ pipeline {
             }
         }
         stage('Push image') {
+	    agent any
             steps {
                 echo "Push image"
                 script {

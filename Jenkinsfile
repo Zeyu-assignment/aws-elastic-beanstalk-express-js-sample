@@ -70,7 +70,7 @@ pipeline {
             node('built-in') {
                 script {
                     sh "cp /var/jenkins_home/jobs/${env.JOB_NAME}/builds/${env.BUILD_NUMBER}/log ${WORKSPACE}/build.log"
-                    archiveArtifacts artifacts: '*.log', allowEmptyArchive: true
+                    archiveArtifacts artifacts: 'build.log', allowEmptyArchive: true
                 }
             }
         }

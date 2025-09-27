@@ -67,7 +67,7 @@ pipeline {
     }
     post {
         always {
-            node {
+            node('any') {
                 archiveArtifacts artifacts: 'log', allowEmptyArchive: true
             }
         }

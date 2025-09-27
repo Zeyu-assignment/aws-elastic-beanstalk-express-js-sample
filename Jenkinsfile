@@ -80,7 +80,7 @@ pipeline {
                 script {
                     sh "cp -r /var/jenkins_home/jobs/${env.JOB_NAME}/${BUILD_NUMBER}/logs ${WORKSPACE}/"
                     sh "cp /var/jenkins_home/jobs/${env.JOB_NAME}/builds/${env.BUILD_NUMBER}/log ${WORKSPACE}/build.log"
-                    archiveArtifacts artifacts: 'logs/*,build.log', allowEmptyArchive: true
+                    archiveArtifacts artifacts: "logs/*${BUILD_NUMBER}.log,build.log", allowEmptyArchive: true
                 }
             }
         }

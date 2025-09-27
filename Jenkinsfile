@@ -6,7 +6,7 @@ pipeline {
             agent {
                 docker { 
                     image 'node:16'
-                    args '-u root -v /var/jenkins_home:/var/jenkins_home'
+                    args '-v /var/jenkins_home:/var/jenkins_home'
                 }
             }
             stages {

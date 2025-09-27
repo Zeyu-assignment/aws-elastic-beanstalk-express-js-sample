@@ -12,7 +12,7 @@ pipeline {
             stages {
                 stage('Npm Install') {
                     steps {
-                        sh 'mkdir -p /var/jenkins_home/jobs/${env.JOB_NAME}/${BUILD_NUMBER}/logs'
+                        sh "mkdir -p /var/jenkins_home/jobs/${env.JOB_NAME}/${BUILD_NUMBER}/logs"
                         echo "Npm install"
                         sh "npm install --save 2>&1 | tee /var/jenkins_home/jobs/${env.JOB_NAME}/${BUILD_NUMBER}/logs/npm_install_${BUILD_NUMBER}.log"
                     }

@@ -68,7 +68,10 @@ pipeline {
     post {
         always {
             node('built-in') {
-                archiveArtifacts artifacts: 'log', allowEmptyArchive: true
+                script {
+                    sh "cp /var/jenkins_home/jobs/${env.JOB_NAME}/builds/${env.BUILD_NUMBER}/log ${WORKSPACE}/build.log"
+                    archiveArtifacts artifacts: '*.log', allowEmptyArchive: true
+                }
             }
         }
     }

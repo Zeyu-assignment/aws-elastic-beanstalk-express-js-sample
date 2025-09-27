@@ -2,9 +2,14 @@ pipeline {
     agent {
         docker { 
             image 'node:16'
-            args '-v /var/jenkins_home:/var/jenkins_home -v /var/run/docker.sock:/var/run/docker.sock' 
+	    args '-u root -v /var/jenkins_home:/var/jenkins_home -v /usr/bin/docker:/usr/bin/docker'
         }
     }
+    environment {
+    	DOCKER_HOST = "tcp://docker:2376"
+    	DOCKER_TLS_VERIFY = "1"
+    	DOCKER_CERT_PATH = "/certs/client"
+	}
     stages {
         stage('Npm Install') {
             steps {

@@ -67,7 +67,9 @@ pipeline {
     }
     post {
         always {
-            archiveArtifacts artifacts: 'log', allowEmptyArchive: true
+            node {
+                archiveArtifacts artifacts: 'log', allowEmptyArchive: true
+            }
         }
     }
 }

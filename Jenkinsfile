@@ -12,16 +12,18 @@ pipeline {
             stages {
                 stage('Npm Install') {
                     steps {
-                        sh "set -e && set -o pipefail && mkdir -p /var/jenkins_home/jobs/${env.JOB_NAME}/${BUILD_NUMBER}/logs"
+                        sh "set -e && mkdir -p /var/jenkins_home/jobs/${env.JOB_NAME}/${BUILD_NUMBER}/logs"
                         echo "Npm install"
-                        sh "set -e && set -o pipefail && npm install --save 2>&1 | tee /var/jenkins_home/jobs/${env.JOB_NAME}/${BUILD_NUMBER}/logs/npm_install_${BUILD_NUMBER}.log"
+                        sh "set -e && npm install --save > /var/jenkins_home/jobs/${env.JOB_NAME}/${BUILD_NUMBER}/logs/npm_install_${BUILD_NUMBER}.log 2>&1"
+                        sh "cat /var/jenkins_home/jobs/${env.JOB_NAME}/${BUILD_NUMBER}/logs/npm_install_${BUILD_NUMBER}.log"
                     }
                 }
                 
                 stage('Unit test') {
                     steps {
                         echo "Unit test"
-                        sh "set -e && set -o pipefail && npm test 2>&1 | tee /var/jenkins_home/jobs/${env.JOB_NAME}/${BUILD_NUMBER}/logs/npm_test_${BUILD_NUMBER}.log"
+                        sh "set -e && npm test > /var/jenkins_home/jobs/${env.JOB_NAME}/${BUILD_NUMBER}/logs/npm_test_${BUILD_NUMBER}.log 2>&1"
+                        sh "cat /var/jenkins_home/jobs/${env.JOB_NAME}/${BUILD_NUMBER}/logs/npm_test_${BUILD_NUMBER}.log"
                     }
                 }
                 
@@ -48,7 +50,8 @@ pipeline {
                         echo "Build image"
                         script {
                             def buildLog = "/var/jenkins_home/jobs/${env.JOB_NAME}/${BUILD_NUMBER}/logs/docker_build_${BUILD_NUMBER}.log"
-                            sh "set -e && set -o pipefail && docker build -t 21441677/assignment2_21441677:${BUILD_NUMBER} . 2>&1 | tee ${buildLog}"
+                            sh "set -e && docker build -t 21441677/assignment2_21441677:${BUILD_NUMBER} . > ${buildLog} 2>&1"
+                            sh "cat ${buildLog}"
                             sh "set -e && docker tag 21441677/assignment2_21441677:${BUILD_NUMBER} 21441677/assignment2_21441677:latest"
                         }
                     }
@@ -60,9 +63,10 @@ pipeline {
                         script {
                             def pushLog = "/var/jenkins_home/jobs/${env.JOB_NAME}/${BUILD_NUMBER}/logs/docker_push_${BUILD_NUMBER}.log"
                             withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
-                                sh "set -e && echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin"
-                                sh "set -e && set -o pipefail && docker push 21441677/assignment2_21441677:${BUILD_NUMBER} 2>&1 | tee ${pushLog}"
-                                sh "set -e && set -o pipefail && docker push 21441677/assignment2_21441677:latest 2>&1 | tee -a ${pushLog}"
+                                sh "set -e && echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin > ${pushLog} 2>&1"
+                                sh "set -e && docker push 21441677/assignment2_21441677:${BUILD_NUMBER} >> ${pushLog} 2>&1"
+                                sh "set -e && docker push 21441677/assignment2_21441677:latest >> ${pushLog} 2>&1"
+                                sh "cat ${pushLog}"
                             }
                         }
                     }
